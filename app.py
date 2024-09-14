@@ -170,59 +170,7 @@ def add_clinical_sections():
 add_clinical_sections()
 
 
-
-
   
-
-# Create the allergies table and inject it into the XML
-# allergies_table = create_allergies_table('Allergies Data')
-# add_sub_element(section_elem, 'text', attrib={'markup': 'HTML', 'value': allergies_table})
-
-# Allergies section
-# IHE Resource https://wiki.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.3.13
-# add_clinical_section('Allergies', 'Allergies Data')
-# add_sub_element(section_elem, 'templateId', attrib={'root': '2.16.840.1.113883.10.20.1.2'})
-# add_sub_element(section_elem, 'templateId', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.3.13'})
-# add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-# add_sub_element(section_elem, 'code', attrib={'code': '48765-2', 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': 'Allergies, adverse reactions, alerts'})
-# add_sub_element(section_elem, 'text', text='Allergies')
-# add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})
-
-# Medications section
-# IHE Resource https://wiki.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.3.19
-# add_clinical_section('Medications', 'Medications Data')
-# add_sub_element(section_elem, 'templateId', attrib={'root': '2.16.840.1.113883.10.20.1.2'})
-# add_sub_element(section_elem, 'templateId', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.3.19'})
-# add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-# add_sub_element(section_elem, 'code', attrib={'code': '10160-0', 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': 'History of medication use'})
-# add_sub_element(section_elem, 'text', text='Medications')
-# add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.7'})
-
-# Problems List section
-# IHE Resource https://wiki.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.3.6
-# add_clinical_section('Problems List', 'Problems list Data')
-# add_sub_element(section_elem, 'templateId', attrib={'root': '2.16.840.1.113883.10.20.1.11'})
-# add_sub_element(section_elem, 'templateId', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.3.6'})
-# add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-# add_sub_element(section_elem, 'code', attrib={'code': '11450-4', 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': 'Problem List'})
-# add_sub_element(section_elem, 'text', text='Problems List')
-# add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.2'})
-
-# Procedures section
-# IHE Resource https://wiki.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.3.12
-# add_clinical_section('Procedures', 'Procedures Data')
-# add_sub_element(section_elem, 'templateId', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.3.11'})
-# add_sub_element(section_elem, 'templateId', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.3.12'})
-# add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-# add_sub_element(section_elem, 'code', attrib={'code': '47519-4', 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': 'History of procedures'})
-# add_sub_element(section_elem, 'text', text='Procedures')
-# add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.4'})
-
-
-# Add other sections as needed...
-
-
-
 # Convert the XML tree to a string and write to a file
 tree = ET.ElementTree(root)
 
