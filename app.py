@@ -131,13 +131,13 @@ def add_clinical_sections():
         ('Procedures', 'Procedures Data', '1.3.6.1.4.1.19376.1.5.3.1.3.11', '1.3.6.1.4.1.19376.1.5.3.1.3.12', '47519-4', 'History of procedures')
         
     ]
-    
-    for section_title, sheet_name, template_id, templateid, code, display_name in sections:
+
+    for section_title, sheet_name, oid1, oid2, code, display_name in sections:
         section = ET.SubElement(structured_body, 'component')
-        section_elem = ET.SubElement(section, 'section')        
+        section_elem = ET.SubElement(section, 'section')
         add_clinical_section(section_title, sheet_name)
-        add_sub_element(section_elem, 'templateId', attrib={'root': template_id})
-        add_sub_element(section_elem, 'templateId', attrib={'root': templateid})
+        add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
+        add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
         add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
         add_sub_element(section_elem, 'code', attrib={'code': code, 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': display_name})
         # Create the text element
