@@ -3,7 +3,7 @@ from datetime import datetime
 import xml.etree.ElementTree as ET
 
 # Load the Excel file
-file_path = 'static/in/Sample_PS_L1.xlsx'  # Update this with your file path
+file_path = 'static/in/sample_ps.xlsx'  # Update this with your file path
 excel_file = pd.ExcelFile(file_path)
 
 # Create the root element for the CDA document
