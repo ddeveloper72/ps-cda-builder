@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import datetime
+import json
 import xml.etree.ElementTree as ET
 
 # Load the Excel file
@@ -124,48 +125,58 @@ def add_section_data(section_elem, sheet_name):
 # IHE Resource https://wiki.ihe.net/index.php/
 def add_clinical_sections():
 
-    sections = [
-        ('Allergies', 'Allergies Data', '2.16.840.1.113883.10.20.1.2', '1.3.6.1.4.1.19376.1.5.3.1.3.13', '48765-2', 'Allergies, adverse reactions, alerts'),
-        ('Medications', 'Medications Data', '2.16.840.1.113883.10.20.1.2', '1.3.6.1.4.1.19376.1.5.3.1.3.19', '10160-0', 'History of medication use'),
-        ('Problems List', 'Problems list Data', '2.16.840.1.113883.10.20.1.11', '1.3.6.1.4.1.19376.1.5.3.1.3.6', '11450-4', 'Problem List'),
-        ('Procedures', 'Procedures Data', '1.3.6.1.4.1.19376.1.5.3.1.3.11', '1.3.6.1.4.1.19376.1.5.3.1.3.12', '47519-4', 'History of procedures')
-        
-    ]
+    sections = get_sections()
 
-    for section_title, sheet_name, oid1, oid2, code, display_name in sections:
-        section = ET.SubElement(structured_body, 'component')
-        section_elem = ET.SubElement(section, 'section')
-        add_clinical_section(section_title, sheet_name)
-        add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
-        add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
-        add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-        add_sub_element(section_elem, 'code', attrib={'code': code, 'codeSystem': '2.16.840.1.113883.6.1', 'codeSystemName': 'LOINC', 'displayName': display_name})
-        # Create the text element
-        text = ET.SubElement(section_elem, 'text')
+    # Add different sections
+    # IHE Resource https://wiki.ihe.net/index.php/
+    for section_title, sheet_name, oid1, oid2, code, display_name, code_system, code_system_name  in sections:
+        if sheet_name in excel_file.sheet_names:
+            section = ET.SubElement(structured_body, 'component')
+            section_elem = ET.SubElement(section, 'section')
+            add_clinical_section(section_title, sheet_name)
+            add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
+            add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
+            add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
+            add_sub_element(section_elem, 'code', attrib={'code': code, 'displayName': display_name, 'codeSystem': code_system, 'codeSystemName': code_system_name})
+            # Create the text element
+            text = ET.SubElement(section_elem, 'text')
 
-        # Create the table element
-        table = ET.SubElement(text, 'table')
+            # Create the table element
+            table = ET.SubElement(text, 'table')
 
-        # Create the thead element
-        thead = ET.SubElement(table, 'thead')
+            # Create the thead element
+            thead = ET.SubElement(table, 'thead')
 
-        # Add the headers
-        headers = add_section_headers(section_elem, sheet_name)
-        header_row = ET.SubElement(thead, 'tr')
-        for header in headers:
-            add_sub_element(header_row, 'th', text=header)
-        
-        # Create the tbody element
-        tbody = ET.SubElement(table, 'tbody')
-       
-        # Add the data cells
-        data_frame = add_section_data(section_elem, sheet_name)
-        row_elem = ET.SubElement(tbody, 'tr')
-        for _, row in data_frame.iterrows():
-            for _, cell in row.items():
-                add_sub_element(row_elem, 'td', text=str(cell))
+            # Add the headers
+            headers = add_section_headers(section_elem, sheet_name)
+            header_row = ET.SubElement(thead, 'tr')
+            for header in headers:
+                add_sub_element(header_row, 'th', text=header)
+            
+            # Create the tbody element
+            tbody = ET.SubElement(table, 'tbody')
+           
+            # Add the data cells
+            data_frame = add_section_data(section_elem, sheet_name)
+            for _, row in data_frame.iterrows():
+                row_elem = ET.SubElement(tbody, 'tr')
+                for _, cell in row.items():
+                    add_sub_element(row_elem, 'td', text=str(cell))
 
-        add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})  # Adjust entry root as needed
+            add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})  # Adjust entry root as needed
+        else:
+            print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
+
+
+# Function to read the JSON file and return the sections
+def get_sections():
+    with open('static/codes/ihe-sections.json', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+        sections = []
+        for p in data['sections']:
+            sections.append((p['section_title'], p['sheet_name'], p['oid1'], p['oid2'], p['code'], p['display_name'], p['code_system'], p['code_system_name']))
+
+    return sections
 
 add_clinical_sections()
 
