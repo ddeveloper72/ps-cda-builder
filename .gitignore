@@ -1,1 +1,5 @@
+# directories
 venv/ 
+
+# Byte-compiled / optimized / DLL files
+~$*.xlsx
