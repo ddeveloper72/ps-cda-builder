@@ -17,11 +17,46 @@ def add_sub_element(parent, tag, text=None, attrib={}):
         element.text = text
     return element
 
+class CDAData:
+    def __init__(self):
+        with open('static/codes/ehdsi.json', encoding='utf-8') as json_file:
+            data = json.load(json_file)
+            self.head = [(p['displayName'], p['code'], p['codeSystem'], p['codeSystemName']) for p in data['code']]
+            self.conf = [(p['confidentiality'], p['codeSystem'], p['displayName']) for p in data['confidentialityCode']]
+            self.custodian = [(p['title'], p['extension'], p['oid']) for p in data['custodian']]
+
+    def get_headers(self):
+        return self.head
+
+    def get_confidentiality(self):
+        return self.conf
+    
+    def get_custodian(self):
+        return self.custodian
+
+cda_data = CDAData()
+
+
 # Add header elements required for CDA
-id_element = add_sub_element(root, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.1'})
-code_element = add_sub_element(root, 'code', attrib={'code': '34133-9', 'codeSystem': '2.16.840.1.113883.6.1'})
-title_element = add_sub_element(root, 'title', text='Patient Summary')
-effective_time_element = add_sub_element(root, 'effectiveTime', attrib={'value': '20240912'})
+def add_header_elements():
+    head = cda_data.get_headers()
+    conf = cda_data.get_confidentiality()
+
+    for displayName, code, codeSystem, codeSystemName in head:
+        add_sub_element(root, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.1'})
+        add_sub_element(root, 'code', attrib={'code': code, 'codeSystem': codeSystem, 'codeSystemName': codeSystemName})
+        add_sub_element(root, 'title', text=displayName)
+        add_sub_element(root, 'effectiveTime', attrib={'value': datetime.now().strftime('%Y%m%d%H%M%S')})
+        
+    for confidentiality, codeSystem, displayName in conf:  
+        add_sub_element(root, 'confidentialityCode', attrib={'code': confidentiality, 'codeSystem': codeSystem, 'displayName': displayName})
+
+
+
+# Function to read the JSON file and return the header & confidentiality elements
+
+
+add_header_elements()
 
 # Record Target (Patient Information)
 record_target = ET.SubElement(root, 'recordTarget')
@@ -74,15 +109,24 @@ for _, row in author_data.iterrows():
 
 
 # Custodian (Organization Information)
-custodian = ET.SubElement(root, 'custodian')
-assigned_custodian = ET.SubElement(custodian, 'assignedCustodian')
-represented_custodian_organization = ET.SubElement(assigned_custodian, 'representedCustodianOrganization')
-add_sub_element(represented_custodian_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '98765'})
-add_sub_element(represented_custodian_organization, 'name', text='Healthcare Provider')
+def add_custodian():
+    custodian = cda_data.get_custodian()
+
+    for title, extension, oid in custodian:
+        custodian = ET.SubElement(root, 'custodian')
+        assigned_custodian = ET.SubElement(custodian, 'assignedCustodian')
+        represented_custodian_organization = ET.SubElement(assigned_custodian, 'representedCustodianOrganization')
+        add_sub_element(represented_custodian_organization, 'id', attrib={'root': oid, 'extension': extension})
+        add_sub_element(represented_custodian_organization, 'name', text=title)
+
+add_custodian()
 
 # Component (Clinical Content)
 component = ET.SubElement(root, 'component')
 structured_body = ET.SubElement(component, 'structuredBody')
+
+
+
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
 def add_clinical_section(section_title, sheet_name):
@@ -163,7 +207,7 @@ def add_clinical_sections():
                 for _, cell in row.items():
                     add_sub_element(row_elem, 'td', text=str(cell))
 
-            add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})  # Adjust entry root as needed
+            # add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})  # Adjust entry root as needed
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
