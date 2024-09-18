@@ -1,4 +1,4 @@
-a# 🚧 CDA Generator Application (in development)
+# 🚧 CDA Generator Application (in development)
 
 This application is designed to generate a Patient Summary Clinical Document Architecture (CDA) XML file based on data from an Excel file. The generated XML file will follow the <a href="https://art-decor.ehdsi.eu/art-decor/decor-templates--epsos-?section=templates&id=1.3.6.1.4.1.12559.11.10.1.3.1.1.3&effectiveDate=2024-04-19T10:03:32&language=en-US" target="_blank">eHDSI CDA standard</a> once fully developed and can be used for exchanging patient information between healthcare systems.
 
