@@ -20,16 +20,16 @@ The purpose of this application is to automate the process of creating a Patient
 
 ## Reference Material 
 
-<a href="https://gazelle.ihe.net/gazelle-documentation/CDA-Generator/user.html" about="_blank">CDA Generator</a>
+<a href="https://gazelle.ihe.net/gazelle-documentation/CDA-Generator/user.html" target="_blank">CDA Generator</a>
 
-<a href="https://art-decor.ehdsi.eu/" about="_blank">ART-DECOR</a>
+<a href="https://art-decor.ehdsi.eu/" target="_blank">ART-DECOR</a>
 
-<a href="https://art-decor.ehdsi.eu/art-decor/decor-templates--epsos-?section=templates&id=1.3.6.1.4.1.12559.11.10.1.3.1.1.3&effectiveDate=2024-04-19T10:03:32&language=en-US" about="_blank">eHDSI Patient Summary</a>
+<a href="https://art-decor.ehdsi.eu/art-decor/decor-templates--epsos-?section=templates&id=1.3.6.1.4.1.12559.11.10.1.3.1.1.3&effectiveDate=2024-04-19T10:03:32&language=en-US" target="_blank">eHDSI Patient Summary</a>
 
-<a href="https://wiki.ihe.net/index.php/Main_Page" about="_blank">IHE Wiki</a>
+<a href="https://wiki.ihe.net/index.php/Main_Page" target="_blank">IHE Wiki</a>
 
-<a href="https://code.europa.eu/ehdsi/ehdsi-general-repository" about="_blank">eHDSI General Repository</a>
+<a href="https://code.europa.eu/ehdsi/ehdsi-general-repository" target="_blank">eHDSI General Repository</a>
 
-<a href="https://code.europa.eu/ehdsi/ehdsi-general-repository/-/tree/e521266708aac6e47a1e78f243c178bc0eb7d3b2/cda%20documents" about="_blank">eHDSI sample CDA templates</a>
+<a href="https://code.europa.eu/ehdsi/ehdsi-general-repository/-/tree/e521266708aac6e47a1e78f243c178bc0eb7d3b2/cda%20documents" target="_blank">eHDSI sample CDA templates</a>
 
-<a href="https://code.europa.eu/ehdsi/ehdsi-general-repository" about="_blank">Irish SNOMED Reference Set</a>
+<a href="https://www.ehealthireland.ie/technology-and-transformation-functions/standards-and-shared-care-records-sscr/standards-and-terminologies/snomed-ct/" target="_blank">Irish SNOMED Reference Set</a>
