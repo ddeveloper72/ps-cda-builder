@@ -126,11 +126,10 @@ def add_custodian(root):
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
 def add_clinical_section(root, section_title, sheet_name, patient_id):
-    component = ET.SubElement(root, 'component')
-    structured_body = ET.SubElement(component, 'structuredBody')
-    section = ET.SubElement(structured_body, 'component')
+
+    component = ET.SubElement(root, 'component')    
+    section = ET.SubElement(component, 'structuredBody')
     section_elem = ET.SubElement(section, 'section')
-    add_sub_element(section_elem, 'title', text=section_title)
 
 
     # Read the data for the section
@@ -163,7 +162,8 @@ def add_section_data(section_elem, sheet_name):
 # Add clinical sections filtered by patient ID with table rendering
 def add_clinical_sections(root, patient_id):
     sections = get_sections()  # Retrieve sections from JSON
-    structured_body = ET.SubElement(root, 'structuredBody')  # Create structured body element
+    component = ET.SubElement(root, 'component')  # Create component element
+    structured_body = ET.SubElement(component, 'structuredBody')  # Create structured body element
 
     for section_title, sheet_name, oid1, oid2, code, display_name, code_system, code_system_name in sections:
         if sheet_name in excel_file.sheet_names:
@@ -188,6 +188,7 @@ def add_clinical_sections(root, patient_id):
                 'codeSystem': code_system,
                 'codeSystemName': code_system_name
             })
+            add_sub_element(section_elem, 'title', text=section_title)
 
             # Create the text element
             text = ET.SubElement(section_elem, 'text')
@@ -201,6 +202,7 @@ def add_clinical_sections(root, patient_id):
             # Add the headers
             headers = section_data.columns.tolist()  # Use the headers directly from the DataFrame
             header_row = ET.SubElement(thead, 'tr')
+
             for header in headers:
                 add_sub_element(header_row, 'th', text=header)
 
