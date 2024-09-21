@@ -1,11 +1,22 @@
+from flask import Flask
 import pandas as pd
 from datetime import datetime
 import json
 import xml.etree.ElementTree as ET
 
+
+# initialize the Flask app
+app = Flask(__name__)
+
 # Load the Excel file
 file_path = 'static/in/sample_ps.xlsx'  # Update this with your file path
 excel_file = pd.ExcelFile(file_path)
+
+# Get patient names and IDs from the Excel file
+def get_patient_list():
+    patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
+    patient_list = patient_data[['Patient ID', 'Given Name', 'Family Name']]
+    return patient_list
 
 
 # Helper function to add sub-elements with text and attributes
