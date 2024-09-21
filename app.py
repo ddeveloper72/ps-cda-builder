@@ -124,25 +124,6 @@ def add_custodian(root):
 
 
 
-# Function to add clinical data sections (e.g., Allergies, Medications)
-def add_clinical_section(root, section_title, sheet_name, patient_id):
-
-    component = ET.SubElement(root, 'component')    
-    section = ET.SubElement(component, 'structuredBody')
-    section_elem = ET.SubElement(section, 'section')
-
-
-    # Read the data for the section
-    data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-    data_frame = data_frame[data_frame['Patient ID'] == patient_id] # Filter data for the patient ID
-    
-    for _, row in data_frame.iterrows():
-        entry = ET.SubElement(section_elem, 'entry')
-        act = ET.SubElement(entry, 'act', attrib={'classCode': 'ACT', 'moodCode': 'EVN'})
-        add_sub_element(act, 'code', attrib={'code': str(row['Code']), 'displayName': str(row['Description'])})
-
-
-
 # Add a table to the section element of the XML tree with the headers from the sheet data frame and return 
 # the headers as a list of strings
 def add_section_headers(section_elem, sheet_name):
