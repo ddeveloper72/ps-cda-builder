@@ -57,13 +57,19 @@ def add_header_elements(root):
         add_sub_element(root, 'confidentialityCode', attrib={'code': confidentiality, 'codeSystem': codeSystem, 'displayName': displayName})
 
 
-# Record Target (Patient Information)
+# Add patient record (Patient Information)
 def add_patient_record_target(root):
     record_target = ET.SubElement(root, 'recordTarget')
     patient_role = ET.SubElement(record_target, 'patientRole')
 
     # Extract Patient Data and add to XML
     patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
+    patient_data = patient_data[patient_data['Patient ID'] == patient_id]
+    
+    if patient_data.empty:
+        print(f"Error: Patient ID '{patient_id}' not found in the Excel file.")
+        return
+    
     for _, row in patient_data.iterrows():
 
         PATIENT_ID = str(row['Patient ID'])
