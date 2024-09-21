@@ -1,1 +1,19 @@
-ECHO is on.
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Generate Patient Summary CDA</h2>
+        <form action="/generate_cda" method="POST">
+            <label for="patient_id">Select a Patient:</label>
+            <select name="patient_id" id="patient_id" required>
+                <option value="">-- Select a Patient --</option>
+                {% for patient in patients %}
+                <option value="{{ patient['Patient ID'] }}">{{ patient['Patient ID'] }} - {{ patient['Given Name'] }} {{
+                    patient['Family Name'] }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button type="submit" class="button">Generate CDA</button>
+        </form>
+    </div>
+{% endblock %}
