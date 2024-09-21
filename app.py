@@ -97,6 +97,7 @@ def add_patient_record_target(root, patient_id):
 def add_author_record_target(root):
     author_section = ET.SubElement(root, 'author')
     author_data = pd.read_excel(excel_file, sheet_name='Author Data')
+    
     for _, row in author_data.iterrows():
         assigned_author = ET.SubElement(author_section, 'assignedAuthor')
         add_sub_element(assigned_author, 'id', attrib={'extension': str(row['Author ID'])})
@@ -108,7 +109,6 @@ def add_author_record_target(root):
         add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
         add_sub_element(represented_organization, 'name', text='Healthcare Provider')
 
-add_author_record_target()
 
 
 # Custodian (Organization Information)
