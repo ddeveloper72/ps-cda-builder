@@ -20,9 +20,38 @@ class CDAData:
     def __init__(self):
         with open('static/codes/ehdsi.json', encoding='utf-8') as json_file:
             data = json.load(json_file)
-            self.head = [(p['displayName'], p['code'], p['codeSystem'], p['codeSystemName']) for p in data['code']]
-            self.conf = [(p['confidentiality'], p['codeSystem'], p['displayName']) for p in data['confidentialityCode']]
-            self.custodian = [(p['title'], p['extension'], p['oid']) for p in data['custodian']]
+            self.head = [
+                (
+                    p['displayName'], 
+                    p['code'], 
+                    p['codeSystem'], 
+                    p['codeSystemName']
+                    ) 
+                    for p in data['code']]
+            
+            self.conf = [
+                (
+                    p['confidentiality'], 
+                    p['codeSystem'], 
+                    p['displayName']
+                    ) 
+                    for p in data['confidentialityCode']]
+
+            self.custodian = [
+                (
+                    p['title'], 
+                    p['oid'], 
+                    p['address'], 
+                    p['city'], 
+                    p['county'], 
+                    p['postalCode'], 
+                    p['country'], 
+                    p['phone'], 
+                    p['use'], 
+                    p['email'], 
+                    p['website']
+                    ) 
+                    for p in data['custodian']]
 
     def get_headers(self):
         return self.head
@@ -116,12 +145,22 @@ def add_author_record_target(root):
 def add_custodian(root):
     custodian = cda_data.get_custodian()
 
-    for title, extension, oid in custodian:
+    for title, oid, address, city, county, postalCode, country, phone, use, email, website in custodian:
         custodian = ET.SubElement(root, 'custodian')
         assigned_custodian = ET.SubElement(custodian, 'assignedCustodian')
         represented_custodian_organization = ET.SubElement(assigned_custodian, 'representedCustodianOrganization')
-        add_sub_element(represented_custodian_organization, 'id', attrib={'root': oid, 'extension': extension})
+        add_sub_element(represented_custodian_organization, 'id', attrib={'root': oid})
         add_sub_element(represented_custodian_organization, 'name', text=title)
+        addr = ET.SubElement(represented_custodian_organization, 'addr')
+        add_sub_element(addr, 'streetAddressLine', text=address)
+        add_sub_element(addr, 'city', text=city)
+        add_sub_element(addr, 'state', text=county)
+        add_sub_element(addr, 'postalCode', text=postalCode)
+        add_sub_element(addr, 'country', text=country)
+        add_sub_element(represented_custodian_organization, 'telecom', attrib={'value': phone, 'use': use})
+        add_sub_element(represented_custodian_organization, 'email', text=email)
+        add_sub_element(represented_custodian_organization, 'website', text=website)
+
 
 
 
