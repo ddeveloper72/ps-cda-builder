@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import pandas as pd
 from datetime import datetime
 import json
@@ -17,6 +17,12 @@ def get_patient_list():
     patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
     patient_list = patient_data[['Patient ID', 'Given Name', 'Family Name']]
     return patient_list
+
+# Rout for main page
+@app.route('/')
+def index():
+    patients = get_patient_list().to_dict(orient='records')
+    return render_template('index.html', patients=patients)
 
 
 # Helper function to add sub-elements with text and attributes
