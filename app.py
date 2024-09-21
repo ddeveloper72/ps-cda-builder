@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request, url_for, flash, send_from_directory
+import os
 import pandas as pd
 from datetime import datetime
 import json
@@ -276,9 +277,9 @@ def generate_cda(patient_id):
     save_xml_file(root, patient_id)
 
 # Specify the patient ID for the CDA document
-patient_id = 'P01'
+# patient_id = 'P01'
 
-generate_cda(patient_id)
+# generate_cda(patient_id)
 
 
 if __name__ == '__main__':
