@@ -146,26 +146,72 @@ def add_clinical_section(root, section_title, sheet_name, patient_id):
 
 # Add a table to the section element of the XML tree with the headers from the sheet data frame and return 
 # the headers as a list of strings
-# def add_section_headers(section_elem, sheet_name):
-#     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-#     headers = data_frame.columns.tolist()
-#     return headers
+def add_section_headers(section_elem, sheet_name):
+    data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
+    headers = data_frame.columns.tolist()
+    return headers
 
 # Add data rows to the table element of the XML tree with the data from the sheet data frame.  
 # Populate the table with the data from the sheet data frame
-# def add_section_data(section_elem, sheet_name):
-#     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-#     return data_frame
+def add_section_data(section_elem, sheet_name):
+    data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
+    return data_frame
 
         
 # Add different sections
 # IHE Resource https://wiki.ihe.net/index.php/
+# Add clinical sections filtered by patient ID with table rendering
 def add_clinical_sections(root, patient_id):
+    sections = get_sections()  # Retrieve sections from JSON
+    structured_body = ET.SubElement(root, 'structuredBody')  # Create structured body element
 
-    sections = get_sections()
-    for section_title, sheet_name, _, _, _, _, _, _ in sections:
+    for section_title, sheet_name, oid1, oid2, code, display_name, code_system, code_system_name in sections:
         if sheet_name in excel_file.sheet_names:
-            add_clinical_section(root, section_title, sheet_name, patient_id)
+            # Read the data for the section
+            section_data = pd.read_excel(excel_file, sheet_name=sheet_name)
+            section_data = section_data[section_data['Patient ID'] == patient_id]  # Filter by Patient ID
+
+            if section_data.empty:
+                print(f"No data for Patient ID: {patient_id} in section {section_title}. Skipping.")
+                continue
+
+            # Add section elements
+            section = ET.SubElement(structured_body, 'component')
+            section_elem = ET.SubElement(section, 'section')
+            add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
+            if oid2:  # Check if oid2 exists before adding
+                add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
+            add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
+            add_sub_element(section_elem, 'code', attrib={
+                'code': code,
+                'displayName': display_name,
+                'codeSystem': code_system,
+                'codeSystemName': code_system_name
+            })
+
+            # Create the text element
+            text = ET.SubElement(section_elem, 'text')
+
+            # Create the table element
+            table = ET.SubElement(text, 'table')
+
+            # Create the thead element
+            thead = ET.SubElement(table, 'thead')
+
+            # Add the headers
+            headers = section_data.columns.tolist()  # Use the headers directly from the DataFrame
+            header_row = ET.SubElement(thead, 'tr')
+            for header in headers:
+                add_sub_element(header_row, 'th', text=header)
+
+            # Create the tbody element
+            tbody = ET.SubElement(table, 'tbody')
+
+            # Add the data cells
+            for _, row in section_data.iterrows():
+                row_elem = ET.SubElement(tbody, 'tr')
+                for _, cell in row.items():
+                    add_sub_element(row_elem, 'td', text=str(cell))
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
