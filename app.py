@@ -223,10 +223,6 @@ def get_sections():
             sections.append((p['section_title'], p['sheet_name'], p['oid1'], p['oid2'], p['code'], p['display_name'], p['code_system'], p['code_system_name']))
 
     return sections
-
-add_clinical_sections()
-
-
   
 
 
