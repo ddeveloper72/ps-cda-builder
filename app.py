@@ -1,12 +1,50 @@
+from flask import Flask, render_template, redirect, request, url_for, flash, send_from_directory
+import os
 import pandas as pd
 from datetime import datetime
 import json
 import xml.etree.ElementTree as ET
 
+
+# initialize the Flask app
+app = Flask(__name__)
+
 # Load the Excel file
 file_path = 'static/in/sample_ps.xlsx'  # Update this with your file path
 excel_file = pd.ExcelFile(file_path)
 
+# Get patient names and IDs from the Excel file
+def get_patient_list():
+    patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
+    patient_list = patient_data[['Patient ID', 'Given Name', 'Family Name']]
+    return patient_list
+
+# Rout for main page
+@app.route('/')
+def index():
+    patients = get_patient_list().to_dict(orient='records')
+    return render_template('index.html', patients=patients)
+
+
+
+# Route to generate the CDA document
+@app.route('/generate_cda', methods=['POST'])
+def generate_cda():
+    patient_id = request.form.get('patient_id')
+    if patient_id:
+        generate_cda(patient_id)
+        return redirect(url_for('download_cda', patient_id=patient_id))
+    else:
+        flash('Please select a patient ID.')
+        return redirect(url_for('index'))
+
+# Route to download the CDA document
+@app.route('/download_cda/<patient_id>')
+def download_cda(patient_id):
+    # Specify the file path for the generated CDA document
+    directory = os.path.join(app.root_path, 'static/out')
+    file_name = f"{patient_id}_ps_sample_cda.xml"
+    return send_from_directory(directory, file_name, as_attachment=True)
 
 # Helper function to add sub-elements with text and attributes
 def add_sub_element(parent, tag, text=None, attrib={}):
@@ -239,6 +277,10 @@ def generate_cda(patient_id):
     save_xml_file(root, patient_id)
 
 # Specify the patient ID for the CDA document
-patient_id = 'P01'
+# patient_id = 'P01'
 
-generate_cda(patient_id)
+# generate_cda(patient_id)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
