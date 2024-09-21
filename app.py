@@ -96,7 +96,7 @@ add_patient_record_target()
 
 
 # Author (Document Author Information)
-def add_author_record_target():
+def add_author_record_target(root):
     author_section = ET.SubElement(root, 'author')
     author_data = pd.read_excel(excel_file, sheet_name='Author Data')
     for _, row in author_data.iterrows():
