@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, url_for, flash
 import pandas as pd
 from datetime import datetime
 import json
@@ -23,6 +23,18 @@ def get_patient_list():
 def index():
     patients = get_patient_list().to_dict(orient='records')
     return render_template('index.html', patients=patients)
+
+
+# Route to generate the CDA document
+@app.route('/generate_cda', methods=['POST'])
+def generate_cda():
+    patient_id = request.form.get('patient_id')
+    if patient_id:
+        generate_cda(patient_id)
+        return redirect(url_for('download_cda', patient_id=patient_id))
+    else:
+        flash('Please select a patient ID.')
+        return redirect(url_for('index'))
 
 
 # Helper function to add sub-elements with text and attributes
