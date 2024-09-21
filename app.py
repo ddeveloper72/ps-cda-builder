@@ -125,7 +125,7 @@ def add_custodian(root):
 
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
-def add_clinical_section(root, section_title, sheet_name):
+def add_clinical_section(root, section_title, sheet_name, patient_id):
     component = ET.SubElement(root, 'component')
     structured_body = ET.SubElement(component, 'structuredBody')
     section = ET.SubElement(structured_body, 'component')
@@ -135,19 +135,14 @@ def add_clinical_section(root, section_title, sheet_name):
 
     # Read the data for the section
     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-    
-    # Debug: Print column names
-    print(f"Sheet '{sheet_name}' columns: {data_frame.columns.tolist()}")
-    
-    # Check if the required columns exist
-    if 'Code' not in data_frame.columns or 'Description' not in data_frame.columns:
-        print(f"Warning: Required columns 'Code' or 'Description' not found in sheet '{sheet_name}'. Skipping section.")
-        return
+    data_frame = data_frame[data_frame['Patient ID'] == patient_id]
     
     for _, row in data_frame.iterrows():
         entry = ET.SubElement(section_elem, 'entry')
         act = ET.SubElement(entry, 'act', attrib={'classCode': 'ACT', 'moodCode': 'EVN'})
-        code = ET.SubElement(act, 'code', attrib={'code': str(row['Code']), 'displayName': str(row['Description'])})
+        add_sub_element(act, 'code', attrib={'code': str(row['Code']), 'displayName': str(row['Description'])})
+
+
 
 # Add a table to the section element of the XML tree with the headers from the sheet data frame and return 
 # the headers as a list of strings
