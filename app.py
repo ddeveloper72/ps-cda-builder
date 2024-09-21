@@ -135,7 +135,7 @@ def add_clinical_section(root, section_title, sheet_name, patient_id):
 
     # Read the data for the section
     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-    data_frame = data_frame[data_frame['Patient ID'] == patient_id]
+    data_frame = data_frame[data_frame['Patient ID'] == patient_id] # Filter data for the patient ID
     
     for _, row in data_frame.iterrows():
         entry = ET.SubElement(section_elem, 'entry')
@@ -146,16 +146,16 @@ def add_clinical_section(root, section_title, sheet_name, patient_id):
 
 # Add a table to the section element of the XML tree with the headers from the sheet data frame and return 
 # the headers as a list of strings
-def add_section_headers(section_elem, sheet_name):
-    data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-    headers = data_frame.columns.tolist()
-    return headers
+# def add_section_headers(section_elem, sheet_name):
+#     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
+#     headers = data_frame.columns.tolist()
+#     return headers
 
 # Add data rows to the table element of the XML tree with the data from the sheet data frame.  
 # Populate the table with the data from the sheet data frame
-def add_section_data(section_elem, sheet_name):
-    data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
-    return data_frame
+# def add_section_data(section_elem, sheet_name):
+#     data_frame = pd.read_excel(excel_file, sheet_name=sheet_name)
+#     return data_frame
 
         
 # Add different sections
