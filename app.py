@@ -129,7 +129,7 @@ add_custodian()
 
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
-def add_clinical_section(section_title, sheet_name):
+def add_clinical_section(root, section_title, sheet_name):
     component = ET.SubElement(root, 'component')
     structured_body = ET.SubElement(component, 'structuredBody')
     section = ET.SubElement(structured_body, 'component')
