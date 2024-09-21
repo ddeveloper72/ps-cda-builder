@@ -58,7 +58,7 @@ def add_header_elements(root):
 
 
 # Record Target (Patient Information)
-def add_patient_record_target():
+def add_patient_record_target(root):
     record_target = ET.SubElement(root, 'recordTarget')
     patient_role = ET.SubElement(record_target, 'patientRole')
 
