@@ -114,7 +114,7 @@ add_author_record_target()
 
 
 # Custodian (Organization Information)
-def add_custodian():
+def add_custodian(root):
     custodian = cda_data.get_custodian()
 
     for title, extension, oid in custodian:
