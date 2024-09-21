@@ -58,7 +58,7 @@ def add_header_elements(root):
 
 
 # Add patient record (Patient Information)
-def add_patient_record_target(root):
+def add_patient_record_target(root, patient_id):
     record_target = ET.SubElement(root, 'recordTarget')
     patient_role = ET.SubElement(record_target, 'patientRole')
 
@@ -72,11 +72,8 @@ def add_patient_record_target(root):
     
     for _, row in patient_data.iterrows():
 
-        PATIENT_ID = str(row['Patient ID'])
-
-        id = ET.SubElement(patient_role, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': str(row['Patient ID'])})
-        telecom = ET.SubElement(patient_role, 'telecom', attrib={'use':row['Use'], 'value': row['Phone Number']})
-
+        add_sub_element(patient_role, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': str(row['Patient ID'])})
+        add_sub_element(patient_role, 'telecom', attrib={'use':row['Use'], 'value': row['Phone Number']})
         addr = ET.SubElement(patient_role, 'addr')
         add_sub_element(addr, 'streetAddressLine', text=row['Address'])
         add_sub_element(addr, 'city', text=row['City'])
@@ -98,7 +95,6 @@ def add_patient_record_target(root):
         birth_time = datetime.strptime(str(row['Date of Birth']), '%Y-%m-%d %H:%M:%S')
         add_sub_element(patient, 'birthTime', attrib={'value': birth_time.strftime('%Y%m%d %H:%M:%S')})
 
-add_patient_record_target()
 
 
 # Author (Document Author Information)
