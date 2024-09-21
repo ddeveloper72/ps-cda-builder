@@ -88,10 +88,6 @@ def add_patient_record_target(root, patient_id):
         add_sub_element(patient, 'administrativeGenderCode', attrib={'code': '2.16.840.1.113883.5.1', 'codeSystem':'', 'codeSystemName': '', 'codeSystemVersion': '', 'displayName': str(row['Gender'])})
         languageCommunication = ET.SubElement(patient, 'languageCommunication')
         add_sub_element(languageCommunication, 'languageCode', attrib={'code': row['Language'], 'codeSystem': '2.16.840.1.113883.6.99'})
-
-
-    for _, row in patient_data.iterrows():
-        # Extract Date of Birth and add to XML
         birth_time = datetime.strptime(str(row['Date of Birth']), '%Y-%m-%d %H:%M:%S')
         add_sub_element(patient, 'birthTime', attrib={'value': birth_time.strftime('%Y%m%d %H:%M:%S')})
 
