@@ -7,10 +7,7 @@ from cda_generator import generate_cda_for_patient, get_patient_list
 app = Flask(__name__)
 
 # Secret key for the session
-app.secret_key = 'secret_key'
-app.config
-
-
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 
 # Rout for main page
@@ -37,6 +34,18 @@ def download_cda(patient_id):
     directory = os.path.join(app.root_path, 'static/out')
     file_name = f"{patient_id}_ps_sample_cda.xml"
     return send_from_directory(directory, file_name, as_attachment=True)
+
+# Page not found error handler
+@app.errorhandler(404)
+def page_not_found(e):
+    flash(e, 'alert-danger')
+    return render_template('404.html'), 404
+
+# Internal server error handler
+@app.errorhandler(500)
+def internal_server_error(e):
+    flash(e, 'alert-danger')
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
