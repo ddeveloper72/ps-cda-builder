@@ -279,3 +279,7 @@ def generate_cda(patient_id):
 patient_id = 'P01'
 
 generate_cda(patient_id)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
