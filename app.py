@@ -160,9 +160,14 @@ def add_clinical_section(root, section_title, sheet_name, patient_id):
         
 # Add different sections
 # IHE Resource https://wiki.ihe.net/index.php/
-def add_clinical_sections(root):
+def add_clinical_sections(root, patient_id):
 
     sections = get_sections()
+    for section_title, sheet_name, _, _, _, _, _, _ in sections:
+        if sheet_name in excel_file.sheet_names:
+            add_clinical_section(root, section_title, sheet_name, patient_id)
+        else:
+            print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
     # Create the structured body element
     component = ET.SubElement(root, 'component')
