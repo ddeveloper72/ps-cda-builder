@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, flash
+from flask import Flask, render_template, redirect, request, url_for, flash, send_from_directory
 import pandas as pd
 from datetime import datetime
 import json
@@ -25,6 +25,7 @@ def index():
     return render_template('index.html', patients=patients)
 
 
+
 # Route to generate the CDA document
 @app.route('/generate_cda', methods=['POST'])
 def generate_cda():
@@ -36,6 +37,13 @@ def generate_cda():
         flash('Please select a patient ID.')
         return redirect(url_for('index'))
 
+# Route to download the CDA document
+@app.route('/download_cda/<patient_id>')
+def download_cda(patient_id):
+    # Specify the file path for the generated CDA document
+    directory = os.path.join(app.root_path, 'static/out')
+    file_name = f"{patient_id}_ps_sample_cda.xml"
+    return send_from_directory(directory, file_name, as_attachment=True)
 
 # Helper function to add sub-elements with text and attributes
 def add_sub_element(parent, tag, text=None, attrib={}):
