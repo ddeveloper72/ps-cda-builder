@@ -169,7 +169,7 @@ def add_section_data(section_elem, sheet_name):
         
 # Add different sections
 # IHE Resource https://wiki.ihe.net/index.php/
-def add_clinical_sections():
+def add_clinical_sections(root):
 
     sections = get_sections()
 
