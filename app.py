@@ -222,50 +222,7 @@ def add_clinical_sections(root, patient_id):
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
-    # Create the structured body element
-    # component = ET.SubElement(root, 'component')
-    # structured_body = ET.SubElement(component, 'structuredBody')
-
-    # Add different sections
-    # IHE Resource https://wiki.ihe.net/index.php/
-    # for section_title, sheet_name, oid1, oid2, code, display_name, code_system, code_system_name  in sections:
-    #     if sheet_name in excel_file.sheet_names:
-    #         section = ET.SubElement(structured_body, 'component')
-    #         section_elem = ET.SubElement(section, 'section')
-    #         add_clinical_section(section_title, sheet_name, patient_id)
-    #         add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
-    #         add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
-    #         add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-    #         add_sub_element(section_elem, 'code', attrib={'code': code, 'displayName': display_name, 'codeSystem': code_system, 'codeSystemName': code_system_name})
-    #         # Create the text element
-    #         text = ET.SubElement(section_elem, 'text')
-
-    #         # Create the table element
-    #         table = ET.SubElement(text, 'table')
-
-    #         # Create the thead element
-    #         thead = ET.SubElement(table, 'thead')
-
-    #         # Add the headers
-    #         headers = add_section_headers(section_elem, sheet_name)
-    #         header_row = ET.SubElement(thead, 'tr')
-    #         for header in headers:
-    #             add_sub_element(header_row, 'th', text=header)
-            
-    #         # Create the tbody element
-    #         tbody = ET.SubElement(table, 'tbody')
-           
-    #         # Add the data cells
-    #         data_frame = add_section_data(section_elem, sheet_name)
-    #         for _, row in data_frame.iterrows():
-    #             row_elem = ET.SubElement(tbody, 'tr')
-    #             for _, cell in row.items():
-    #                 add_sub_element(row_elem, 'td', text=str(cell))
-
-    #         # add_sub_element(section_elem, 'entry', attrib={'root': '1.3.6.1.4.1.19376.1.5.3.1.4.5.3'})  # Adjust entry root as needed
-    #     else:
-    #         print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
-
+    
 
 # Function to read the JSON file and return the sections
 def get_sections():
