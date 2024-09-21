@@ -2,9 +2,17 @@
   "custodian": [
     {
       "title": "Ireland - Department of Health",
-      "subtitle": "DOH",
       "extension": "static/logos/doh.png",
-      "oid": "2.16.840.1.113883"
+      "oid": "2.16.840.1.113883",
+      "address": "Hawkins House, Hawkins Street",
+      "city": "Dublin",
+      "county": "Dublin",
+      "postalCode": "D02 NP2",
+      "country": "Ireland",
+      "phone": "+353 1 6354000",
+      "use": "WP",
+      "email": "",
+      "website": "https://www.gov.ie/en/organisation/department-of-health/"
     }
   ],
   "typeId": [
