@@ -241,3 +241,20 @@ def save_xml_file(root, patient_id):
     file_name = f"static/out/{ patient_id }_ps_sample_cda.xml"
     tree.write(file_name, encoding='utf-8', xml_declaration=True)
     print(f"Customized XML file '{file_name}' created successfully.")
+
+
+# Generate a CDA document from the Excel file
+def generate_cda(patient_id):
+    root = create_root_element()
+    add_patient_record_target(root)
+    add_author_record_target(root)
+    add_custodian(root)
+    add_clinical_sections(root)
+    save_xml_file(root, patient_id)
+
+    # save_xml_file(root, patient_id)
+    save_xml_file(root, patient_id)
+
+# Specify the patient ID for the CDA document
+patient_id = 'P01'
+generate_cda(patient_id)
