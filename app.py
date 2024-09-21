@@ -52,60 +52,63 @@ def add_header_elements():
         add_sub_element(root, 'confidentialityCode', attrib={'code': confidentiality, 'codeSystem': codeSystem, 'displayName': displayName})
 
 
-
-# Function to read the JSON file and return the header & confidentiality elements
-
-
 add_header_elements()
 
+
 # Record Target (Patient Information)
-record_target = ET.SubElement(root, 'recordTarget')
-patient_role = ET.SubElement(record_target, 'patientRole')
+def add_patient_record_target():
+    record_target = ET.SubElement(root, 'recordTarget')
+    patient_role = ET.SubElement(record_target, 'patientRole')
 
-# Extract Patient Data and add to XML
-patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
-for _, row in patient_data.iterrows():
+    # Extract Patient Data and add to XML
+    patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
+    for _, row in patient_data.iterrows():
 
-    PATIENT_ID = str(row['Patient ID'])
+        PATIENT_ID = str(row['Patient ID'])
 
-    id = ET.SubElement(patient_role, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': str(row['Patient ID'])})
-    telecom = ET.SubElement(patient_role, 'telecom', attrib={'use':row['Use'], 'value': row['Phone Number']})
+        id = ET.SubElement(patient_role, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': str(row['Patient ID'])})
+        telecom = ET.SubElement(patient_role, 'telecom', attrib={'use':row['Use'], 'value': row['Phone Number']})
 
-    addr = ET.SubElement(patient_role, 'addr')
-    add_sub_element(addr, 'streetAddressLine', text=row['Address'])
-    add_sub_element(addr, 'city', text=row['City'])
-    add_sub_element(addr, 'state', text=row['State'])
-    add_sub_element(addr, 'postalCode', text=row['Zip Code'])
-    add_sub_element(addr, 'country', text=row['Country'])
+        addr = ET.SubElement(patient_role, 'addr')
+        add_sub_element(addr, 'streetAddressLine', text=row['Address'])
+        add_sub_element(addr, 'city', text=row['City'])
+        add_sub_element(addr, 'state', text=row['State'])
+        add_sub_element(addr, 'postalCode', text=row['Zip Code'])
+        add_sub_element(addr, 'country', text=row['Country'])
 
-    patient = ET.SubElement(patient_role, 'patient')
-    name = ET.SubElement(patient, 'name')
-    add_sub_element(name, 'family', text=row['Family Name'])
-    add_sub_element(name, 'given', text=row['Given Name'])
-    add_sub_element(patient, 'administrativeGenderCode', attrib={'code': '2.16.840.1.113883.5.1', 'codeSystem':'', 'codeSystemName': '', 'codeSystemVersion': '', 'displayName': str(row['Gender'])})
-    languageCommunication = ET.SubElement(patient, 'languageCommunication')
-    add_sub_element(languageCommunication, 'languageCode', attrib={'code': row['Language'], 'codeSystem': '2.16.840.1.113883.6.99'})
+        patient = ET.SubElement(patient_role, 'patient')
+        name = ET.SubElement(patient, 'name')
+        add_sub_element(name, 'family', text=row['Family Name'])
+        add_sub_element(name, 'given', text=row['Given Name'])
+        add_sub_element(patient, 'administrativeGenderCode', attrib={'code': '2.16.840.1.113883.5.1', 'codeSystem':'', 'codeSystemName': '', 'codeSystemVersion': '', 'displayName': str(row['Gender'])})
+        languageCommunication = ET.SubElement(patient, 'languageCommunication')
+        add_sub_element(languageCommunication, 'languageCode', attrib={'code': row['Language'], 'codeSystem': '2.16.840.1.113883.6.99'})
 
 
-for _, row in patient_data.iterrows():
-    # Extract Date of Birth and add to XML
-    birth_time = datetime.strptime(str(row['Date of Birth']), '%Y-%m-%d %H:%M:%S')
-    add_sub_element(patient, 'birthTime', attrib={'value': birth_time.strftime('%Y%m%d %H:%M:%S')})
+    for _, row in patient_data.iterrows():
+        # Extract Date of Birth and add to XML
+        birth_time = datetime.strptime(str(row['Date of Birth']), '%Y-%m-%d %H:%M:%S')
+        add_sub_element(patient, 'birthTime', attrib={'value': birth_time.strftime('%Y%m%d %H:%M:%S')})
+
+add_patient_record_target()
 
 
 # Author (Document Author Information)
-author_section = ET.SubElement(root, 'author')
-author_data = pd.read_excel(excel_file, sheet_name='Author Data')
-for _, row in author_data.iterrows():
-    assigned_author = ET.SubElement(author_section, 'assignedAuthor')
-    add_sub_element(assigned_author, 'id', attrib={'extension': str(row['Author ID'])})
-    person = ET.SubElement(assigned_author, 'assignedPerson')
-    name = ET.SubElement(person, 'name')
-    add_sub_element(name, 'given', text=row['Given Name'])
-    add_sub_element(name, 'family', text=row['Family Name'])
-    represented_organization = ET.SubElement(assigned_author, 'representedOrganization')
-    add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
-    add_sub_element(represented_organization, 'name', text='Healthcare Provider')
+def add_author_record_target():
+    author_section = ET.SubElement(root, 'author')
+    author_data = pd.read_excel(excel_file, sheet_name='Author Data')
+    for _, row in author_data.iterrows():
+        assigned_author = ET.SubElement(author_section, 'assignedAuthor')
+        add_sub_element(assigned_author, 'id', attrib={'extension': str(row['Author ID'])})
+        person = ET.SubElement(assigned_author, 'assignedPerson')
+        name = ET.SubElement(person, 'name')
+        add_sub_element(name, 'given', text=row['Given Name'])
+        add_sub_element(name, 'family', text=row['Family Name'])
+        represented_organization = ET.SubElement(assigned_author, 'representedOrganization')
+        add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
+        add_sub_element(represented_organization, 'name', text='Healthcare Provider')
+
+add_author_record_target()
 
 
 # Custodian (Organization Information)
@@ -121,15 +124,12 @@ def add_custodian():
 
 add_custodian()
 
-# Component (Clinical Content)
-component = ET.SubElement(root, 'component')
-structured_body = ET.SubElement(component, 'structuredBody')
-
-
 
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
 def add_clinical_section(section_title, sheet_name):
+    component = ET.SubElement(root, 'component')
+    structured_body = ET.SubElement(component, 'structuredBody')
     section = ET.SubElement(structured_body, 'component')
     section_elem = ET.SubElement(section, 'section')
     add_sub_element(section_elem, 'title', text=section_title)
@@ -170,6 +170,10 @@ def add_section_data(section_elem, sheet_name):
 def add_clinical_sections():
 
     sections = get_sections()
+
+    # Create the structured body element
+    component = ET.SubElement(root, 'component')
+    structured_body = ET.SubElement(component, 'structuredBody')
 
     # Add different sections
     # IHE Resource https://wiki.ihe.net/index.php/
@@ -230,6 +234,10 @@ add_clinical_sections()
 tree = ET.ElementTree(root)
 
 # Save the XML file
-file_name = f"static/out/{ PATIENT_ID }_ps_sample_cda.xml"
-tree.write(file_name, encoding='utf-8', xml_declaration=True)
-print(f"Customized XML file '{file_name}' created successfully.")
+def save_xml_file(patient_id):
+    
+    file_name = f"static/out/{ patient_id }_ps_sample_cda.xml"
+    tree.write(file_name, encoding='utf-8', xml_declaration=True)
+    print(f"Customized XML file '{file_name}' created successfully.")
+
+save_xml_file(patient_id='P01')
