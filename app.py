@@ -122,8 +122,6 @@ def add_custodian(root):
         add_sub_element(represented_custodian_organization, 'id', attrib={'root': oid, 'extension': extension})
         add_sub_element(represented_custodian_organization, 'name', text=title)
 
-add_custodian()
-
 
 
 # Function to add clinical data sections (e.g., Allergies, Medications)
