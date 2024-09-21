@@ -232,14 +232,12 @@ add_clinical_sections()
 
 
   
-# Convert the XML tree to a string and write to a file
-tree = ET.ElementTree(root)
+
 
 # Save the XML file
-def save_xml_file(patient_id):
+def save_xml_file(root, patient_id):
     
+    tree = ET.ElementTree(root)
     file_name = f"static/out/{ patient_id }_ps_sample_cda.xml"
     tree.write(file_name, encoding='utf-8', xml_declaration=True)
     print(f"Customized XML file '{file_name}' created successfully.")
-
-save_xml_file(patient_id='P01')
