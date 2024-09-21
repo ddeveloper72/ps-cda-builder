@@ -1,6 +1,6 @@
+import os
 import secrets
 from flask import Flask, render_template, redirect, request, url_for, flash, send_from_directory
-import os
 from cda_generator import generate_cda_for_patient, get_patient_list
 
 
