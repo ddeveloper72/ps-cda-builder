@@ -7,8 +7,6 @@ import xml.etree.ElementTree as ET
 file_path = 'static/in/sample_ps.xlsx'  # Update this with your file path
 excel_file = pd.ExcelFile(file_path)
 
-# Create the root element for the CDA document
-root = ET.Element('ClinicalDocument', xmlns="urn:hl7-org:v3", xsi="schemaLocation=http://www.w3.org/2001/XMLSchema-instance")
 
 # Helper function to add sub-elements with text and attributes
 def add_sub_element(parent, tag, text=None, attrib={}):
@@ -36,9 +34,16 @@ class CDAData:
 
 cda_data = CDAData()
 
+# Create the root element for the CDA document
+def create_root_element():
+    root = ET.Element('ClinicalDocument', xmlns="urn:hl7-org:v3", xsi="schemaLocation=http://www.w3.org/2001/XMLSchema-instance")
+    add_header_elements(root)
+    return root
+
 
 # Add header elements required for CDA
-def add_header_elements():
+def add_header_elements(root):
+
     head = cda_data.get_headers()
     conf = cda_data.get_confidentiality()
 
@@ -50,9 +55,6 @@ def add_header_elements():
         
     for confidentiality, codeSystem, displayName in conf:  
         add_sub_element(root, 'confidentialityCode', attrib={'code': confidentiality, 'codeSystem': codeSystem, 'displayName': displayName})
-
-
-add_header_elements()
 
 
 # Record Target (Patient Information)
