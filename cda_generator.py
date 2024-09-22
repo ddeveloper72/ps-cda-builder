@@ -1,3 +1,4 @@
+from curses import flash
 import pandas as pd
 from datetime import datetime
 import json
@@ -97,7 +98,7 @@ def add_patient_record_target(root, patient_id):
     patient_data = patient_data[patient_data['Patient ID'] == patient_id]
     
     if patient_data.empty:
-        print(f"Error: Patient ID '{patient_id}' not found in the Excel file.")
+        flash(f"Error: Patient ID '{patient_id}' not found in the Excel file.", 'alert-danger')
         return
     
     for _, row in patient_data.iterrows():
@@ -219,7 +220,7 @@ def add_clinical_sections(root, patient_id):
             section_data = section_data[section_data['Patient ID'] == patient_id]  # Filter by Patient ID
 
             if section_data.empty:
-                print(f"No data for Patient ID: {patient_id} in section {section_title}. Skipping.")
+                flash(f"No data for Patient ID: {patient_id} in section {section_title}. Skipping.", 'alert-warning')
                 continue
 
             # Add section elements
@@ -267,7 +268,7 @@ def add_clinical_sections(root, patient_id):
                     if col_name != 'Patient ID':
                         add_sub_element(row_elem, 'td', text=str(cell))
         else:
-            print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
+            flash(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.", 'alert-warning')
 
     
 
