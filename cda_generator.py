@@ -268,7 +268,7 @@ def add_clinical_sections(root, patient_id):
                     if col_name != 'Patient ID':
                         add_sub_element(row_elem, 'td', text=str(cell))
         else:
-            flash(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.", 'alert-warning')
+            print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
     
 
