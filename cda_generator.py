@@ -124,11 +124,27 @@ def add_patient_record_target(root, patient_id):
 
 
 # Author (Document Author Information)
-def add_author_record_target(root):
-    author_section = ET.SubElement(root, 'author')
-    author_data = pd.read_excel(excel_file, sheet_name='Author Data')
+def add_author_record_target(root, patient_id):
+    patient_data = pd.read_excel(excel_file, sheet_name='Patient Data')
+    patient_data = patient_data[patient_data['Patient ID'] == patient_id]
     
+    # Extract Author ID
+    author_id = patient_data['Author ID']
+    
+    # Add Author Section
+    author_section = ET.SubElement(root, 'author')
+
+    # Extract Author Data and add to XML
+    author_data = pd.read_excel(excel_file, sheet_name='Author Data')
+    author_data = author_data[author_data['Author ID'] == author_id]
+
+    # Add Author Data to XML
     for _, row in author_data.iterrows():
+        function_code = ET.SubElement(author_section, 'functionCode')        
+        add_sub_element(function_code, 'code', attrib={'code': str(row['Function Code']), 'codeSystem': '2.16.840.1.113883.2.9.6.2.7', 'displayName': str(row['Function Name'])})
+        time = ET.SubElement(author_section, 'time')
+        signature_date = datetime.strptime(str(row['Date']), '%Y-%m-%d %H:%M:%S')
+        add_sub_element(time, 'signatureDate', attrib={'value': signature_date.strftime('%Y%m%d%H%M%S')})
         assigned_author = ET.SubElement(author_section, 'assignedAuthor')
         add_sub_element(assigned_author, 'id', attrib={'extension': str(row['Author ID'])})
         person = ET.SubElement(assigned_author, 'assignedPerson')
@@ -137,7 +153,17 @@ def add_author_record_target(root):
         add_sub_element(name, 'family', text=row['Family Name'])
         represented_organization = ET.SubElement(assigned_author, 'representedOrganization')
         add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
-        add_sub_element(represented_organization, 'name', text='Healthcare Provider')
+        add_sub_element(represented_organization, 'code', text=row['Organization Code'])
+        add_sub_element(represented_organization, 'name', text=row['Organization Name'])
+        addr = ET.SubElement(represented_organization, 'addr')
+        add_sub_element(addr, 'streetAddressLine', text=row['Address'])
+        add_sub_element(addr, 'city', text=row['City'])
+        add_sub_element(addr, 'county', text=row['County'])
+        add_sub_element(addr, 'postalCode', text=row['Post Code'])
+        add_sub_element(addr, 'country', text=row['Country'])
+        add_sub_element(represented_organization, 'telecom', attrib={'use': row['Use'], 'value': row['Phone Number']})
+        add_sub_element(represented_organization, 'email', text=row['Email'])
+
 
 
 
@@ -269,7 +295,7 @@ def save_xml_file(root, patient_id):
 def generate_cda_for_patient(patient_id):
     root = create_root_element()
     add_patient_record_target(root, patient_id)
-    add_author_record_target(root)
+    add_author_record_target(root, patient_id)
     add_custodian(root)
     add_clinical_sections(root, patient_id)
     save_xml_file(root, patient_id)
