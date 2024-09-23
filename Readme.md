@@ -1,6 +1,6 @@
 # 🚧 CDA Builder Application (in development)
 
-The live application is hosted on Heroku at [CDA PS Generator](https://ddeveloper72-cda-builder-6e7de819f3a3.herokuapp.com/)
+The live application is hosted on Heroku at [CDA Builder](https://ddeveloper72-cda-builder-6e7de819f3a3.herokuapp.com/)
 
 The CDA Builder Application is a Flask-based web application that allows users to generate Clinical Document Architecture (CDA) documents for patients. CDAs are XML-based documents used for exchanging clinical information between healthcare systems.
 
