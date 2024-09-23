@@ -27,7 +27,7 @@ The CDA generator tool also references a second eHDSI JSON file, containing data
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/cda-builder.git
+    git clone https://github.com/ddeveloper72/ps-cda-builder.git
     ```
 
 2. Install the required dependencies:
