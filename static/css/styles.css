@@ -23,6 +23,34 @@ body {
   background-color: #f4f4f4;
 }
 
+h1 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+
 /* Layout styles */
 main {
   margin-top: 4.5rem;
