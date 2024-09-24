@@ -2,16 +2,16 @@
   "custodian": [
     {
       "title": "Ireland - Department of Health",
-      "extension": "static/logos/doh.png",
-      "oid": "2.16.840.1.113883",
-      "address": "Hawkins House, Hawkins Street",
+      "oid": "2.16.17.710.813.1000.990.1.5",
+      "extension": "mhec.gov.ie",
+      "address": "Block 1, Miesian Plaza, 50 – 58 Lower Baggot Street",
       "city": "Dublin",
-      "county": "Dublin",
-      "postalCode": "D02 NP2",
+      "county": "Dublin 2",
+      "postalCode": "D02 XW14",
       "country": "Ireland",
-      "phone": "+353 1 6354000",
+      "phone": "+353 01 635 4000",
       "use": "WP",
-      "email": "",
+      "email": "customerservices@health.gov.ie",
       "website": "https://www.gov.ie/en/organisation/department-of-health/"
     }
   ],
