@@ -137,7 +137,8 @@ def add_author_record_target(root, patient_id):
 
     # Extract Author Data and add to XML
     author_data = pd.read_excel(excel_file, sheet_name='Author Data')
-    author_data = author_data[author_data['Author ID'] == author_id]
+    # Filter by Author ID
+    author_data = author_data[author_data['Author ID'] == author_id.iloc[0]]
 
     # Add Author Data to XML
     for _, row in author_data.iterrows():
@@ -219,9 +220,6 @@ def add_clinical_sections(root, patient_id):
             section_data = pd.read_excel(excel_file, sheet_name=sheet_name)
             section_data = section_data[section_data['Patient ID'] == patient_id]  # Filter by Patient ID
 
-            if section_data.empty:
-                flash(f"No data for Patient ID: {patient_id} in section {section_title}. Skipping.", 'alert-warning')
-                continue
 
             # Add section elements
             section = ET.SubElement(structured_body, 'component')
