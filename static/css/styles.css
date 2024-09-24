@@ -37,6 +37,11 @@ p {
   margin-bottom: 0;
 }
 
+/* Layout styles */
+main {
+  margin-top: 4.5rem;
+}
+
 /* Media queries */
 @media (max-width: 768px) {
   body {
@@ -50,17 +55,26 @@ p {
   }
 }
 
-
-/* Layout styles */
-main {
-  margin-top: 4.5rem;
-}
-
 .container-fluid {
   display: flex;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
+}
+
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .intro-container {
+    width: 60%;
+  }
 }
 
 .card {
@@ -73,7 +87,6 @@ main {
   padding: 20px;
   flex-direction: column;
 }
-
 
 .button,
 .button-link {
