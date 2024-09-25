@@ -30,6 +30,13 @@ class CDAData:
                 )
                 for p in data[('rootDirectory')]]
             
+            self.head_type_id = [
+                (
+                    p['typeId'][0]['extension'],
+                    p['typeId'][0]['root']
+                )
+                for p in data['rootDirectory']]
+            
             self.conf = [
                 (
                     p['confidentiality'], 
@@ -56,6 +63,9 @@ class CDAData:
 
     def get_headers(self):
         return self.head
+    
+    def get_header_type_id(self):
+        return self.head_type_id
 
     def get_confidentiality(self):
         return self.conf
@@ -76,9 +86,13 @@ def create_root_element():
 def add_header_elements(root):
 
     head = cda_data.get_headers()
+    head_type_id = cda_data.get_header_type_id()
     conf = cda_data.get_confidentiality()
 
-    for displayName, code, codeSystem, codeSystemName in head:
+    for extension, root_element in head_type_id:
+        add_sub_element(root, 'typeId', attrib={'extension': extension, 'root': root_element})
+
+    for displayName, code, codeSystem, codeSystemName in head:        
         add_sub_element(root, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.1'})
         add_sub_element(root, 'code', attrib={'code': code, 'codeSystem': codeSystem, 'codeSystemName': codeSystemName})
         add_sub_element(root, 'title', text=displayName)
