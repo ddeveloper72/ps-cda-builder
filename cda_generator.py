@@ -131,6 +131,9 @@ def add_author_record_target(root, patient_id):
     
     # Extract Author ID
     author_id = patient_data['Author ID']
+
+    # Extract Authored Date
+    authored_date = pd.to_datetime(patient_data['Authored On'].iloc[0]).strftime('%Y%m%d%H%M%S')
     
     # Add Author Section
     author_section = ET.SubElement(root, 'author')
@@ -144,29 +147,33 @@ def add_author_record_target(root, patient_id):
     for _, row in author_data.iterrows():
         function_code = ET.SubElement(author_section, 'functionCode')        
         add_sub_element(function_code, 'code', attrib={'code': str(row['Function Code']), 'codeSystem': '2.16.840.1.113883.2.9.6.2.7', 'displayName': str(row['Function Name'])})
-        time = ET.SubElement(author_section, 'time')
-        signature_date = datetime.strptime(str(row['Date']), '%Y-%m-%d %H:%M:%S')
-        add_sub_element(time, 'signatureDate', attrib={'value': signature_date.strftime('%Y%m%d%H%M%S')})
-        assigned_author = ET.SubElement(author_section, 'assignedAuthor')
-        add_sub_element(assigned_author, 'id', attrib={'extension': str(row['Author ID'])})
-        person = ET.SubElement(assigned_author, 'assignedPerson')
-        name = ET.SubElement(person, 'name')
-        add_sub_element(name, 'given', text=row['Given Name'])
-        add_sub_element(name, 'family', text=row['Family Name'])
-        represented_organization = ET.SubElement(assigned_author, 'representedOrganization')
-        add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
-        add_sub_element(represented_organization, 'code', text=row['Organization Code'])
-        add_sub_element(represented_organization, 'name', text=row['Organization Name'])
-        addr = ET.SubElement(represented_organization, 'addr')
+        time = ET.SubElement(author_section, 'time', attrib={'value': authored_date})
+        
+        assigned_author = ET.SubElement(author_section, 'assignedAuthor') 
+        addr = ET.SubElement(assigned_author, 'addr')
         add_sub_element(addr, 'streetAddressLine', text=row['Address'])
         add_sub_element(addr, 'city', text=row['City'])
         add_sub_element(addr, 'county', text=row['County'])
         add_sub_element(addr, 'postalCode', text=row['Post Code'])
         add_sub_element(addr, 'country', text=row['Country'])
+
+
+        id =ET.SubElement(assigned_author, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': str(row['Author ID'])})
+        code = ET.SubElement(assigned_author, 'code', attrib={'code': str(row['Function Code']), 'codeSystem': '2.16.840.1.113883.2.9.6.2.7', 'displayName': str(row['Function Name'])})
+        telecom = ET.SubElement(assigned_author, 'telecom', attrib={'use': row['Use'], 'value': row['Phone Number']})
+        telecom = ET.SubElement(assigned_author, 'telecom', attrib={'value': row['Email']})
+
+        represented_organization = ET.SubElement(assigned_author, 'representedOrganization')
+        add_sub_element(represented_organization, 'id', attrib={'root': '2.16.840.1.113883.19.5.99999.2', 'extension': '12345'})
+        add_sub_element(represented_organization, 'code', text=row['Organization Code'])
+        add_sub_element(represented_organization, 'name', text=row['Organization Name'])
         add_sub_element(represented_organization, 'telecom', attrib={'use': row['Use'], 'value': row['Phone Number']})
         add_sub_element(represented_organization, 'email', text=row['Email'])
-
-
+        
+        assigned_person = ET.SubElement(assigned_author, 'assignedPerson')
+        name = ET.SubElement(assigned_person, 'name')        
+        add_sub_element(name, 'given', text=row['Given Name'])
+        add_sub_element(name, 'family', text=row['Family Name'])
 
 
 # Custodian (Organization Information)
@@ -269,7 +276,7 @@ def add_clinical_sections(root, patient_id):
 
             else:
                 print(f"Warning: No data found for Patient ID '{patient_id}' in section '{section_title}'. Skipping section.")
-                
+
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
