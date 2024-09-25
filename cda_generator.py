@@ -250,7 +250,7 @@ def add_clinical_sections(root, patient_id):
             header_row = ET.SubElement(thead, 'tr')
 
             for header in headers:
-                if header != 'Patient ID':
+                if header != 'Patient ID' and header != 'Code':
                     add_sub_element(header_row, 'th', text=header)
 
             # Create the tbody element
@@ -263,7 +263,7 @@ def add_clinical_sections(root, patient_id):
             for _, row in section_data.iterrows():
                 row_elem = ET.SubElement(tbody, 'tr')
                 for col_name, cell in row.items():
-                    if col_name != 'Patient ID':
+                    if col_name != 'Patient ID' and col_name != 'Code':
                         add_sub_element(row_elem, 'td', text=str(cell))
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
