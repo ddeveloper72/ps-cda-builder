@@ -220,51 +220,56 @@ def add_clinical_sections(root, patient_id):
             section_data = pd.read_excel(excel_file, sheet_name=sheet_name)
             section_data = section_data[section_data['Patient ID'] == patient_id]  # Filter by Patient ID
 
+            if not section_data.empty:
+                # Add code here to run when patient_id is in the section data
 
-            # Add section elements
-            section = ET.SubElement(structured_body, 'component')
-            section_elem = ET.SubElement(section, 'section')
-            add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
-            if oid2:  # Check if oid2 exists before adding
-                add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
-            add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
-            add_sub_element(section_elem, 'code', attrib={
-                'code': code,
-                'displayName': display_name,
-                'codeSystem': code_system,
-                'codeSystemName': code_system_name
-            })
-            add_sub_element(section_elem, 'title', text=section_title)
+                section = ET.SubElement(structured_body, 'component')
+                section_elem = ET.SubElement(section, 'section')
+                add_sub_element(section_elem, 'templateId', attrib={'root': oid1})
+                if oid2:  # Check if oid2 exists before adding
+                    add_sub_element(section_elem, 'templateId', attrib={'root': oid2})
+                add_sub_element(section_elem, 'id', attrib={'root': ' ', 'extension': ' '})
+                add_sub_element(section_elem, 'code', attrib={
+                    'code': code,
+                    'displayName': display_name,
+                    'codeSystem': code_system,
+                    'codeSystemName': code_system_name
+                })
+                add_sub_element(section_elem, 'title', text=section_title)
 
-            # Create the text element
-            text = ET.SubElement(section_elem, 'text')
+                # Create the text element
+                text = ET.SubElement(section_elem, 'text')
 
-            # Create the table element
-            table = ET.SubElement(text, 'table')
+                # Create the table element
+                table = ET.SubElement(text, 'table')
 
-            # Create the thead element
-            thead = ET.SubElement(table, 'thead')
+                # Create the thead element
+                thead = ET.SubElement(table, 'thead')
 
-            # Add the headers
-            headers = section_data.columns.tolist()  # Use the headers directly from the DataFrame
-            header_row = ET.SubElement(thead, 'tr')
+                # Add the headers
+                headers = section_data.columns.tolist()  # Use the headers directly from the DataFrame
+                header_row = ET.SubElement(thead, 'tr')
 
-            for header in headers:
-                if header != 'Patient ID' and header != 'Code':
-                    add_sub_element(header_row, 'th', text=header)
+                for header in headers:
+                    if header != 'Patient ID' and header != 'Code':
+                        add_sub_element(header_row, 'th', text=header)
 
-            # Create the tbody element
-            tbody = ET.SubElement(table, 'tbody')
+                # Create the tbody element
+                tbody = ET.SubElement(table, 'tbody')
 
-            # Create the tbody element
-            tbody = ET.SubElement(table, 'tbody')
+                # Create the tbody element
+                tbody = ET.SubElement(table, 'tbody')
 
-            # Add the data cells
-            for _, row in section_data.iterrows():
-                row_elem = ET.SubElement(tbody, 'tr')
-                for col_name, cell in row.items():
-                    if col_name != 'Patient ID' and col_name != 'Code':
-                        add_sub_element(row_elem, 'td', text=str(cell))
+                # Add the data cells
+                for _, row in section_data.iterrows():
+                    row_elem = ET.SubElement(tbody, 'tr')
+                    for col_name, cell in row.items():
+                        if col_name != 'Patient ID' and col_name != 'Code':
+                            add_sub_element(row_elem, 'td', text=str(cell))
+
+            else:
+                print(f"Warning: No data found for Patient ID '{patient_id}' in section '{section_title}'. Skipping section.")
+                
         else:
             print(f"Warning: Sheet '{sheet_name}' not found in the Excel file. Skipping section.")
 
@@ -297,9 +302,6 @@ def generate_cda_for_patient(patient_id):
     add_author_record_target(root, patient_id)
     add_custodian(root)
     add_clinical_sections(root, patient_id)
-    save_xml_file(root, patient_id)
-
-    # save_xml_file(root, patient_id)
     save_xml_file(root, patient_id)
 
 # Get patient names and IDs from the Excel file
