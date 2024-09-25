@@ -23,12 +23,12 @@ class CDAData:
             data = json.load(json_file)
             self.head = [
                 (
-                    p['displayName'], 
-                    p['code'], 
-                    p['codeSystem'], 
-                    p['codeSystemName']
-                    ) 
-                    for p in data['code']]
+                    p['codeElement'][0]['displayName'],
+                    p['codeElement'][0]['code'],
+                    p['codeElement'][0]['codeSystem'],
+                    p['codeElement'][0]['codeSystemName']
+                )
+                for p in data[('rootDirectory')]]
             
             self.conf = [
                 (
